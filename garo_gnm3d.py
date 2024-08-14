@@ -34,8 +34,8 @@ class GNM3D_Meter(device.EnergyMeter):
         super(GNM3D_Meter, self).__init__(*args)
 
         self.info_regs = [
-            Reg_ver( 0x0302, '/HardwareVersion'),
-            Reg_ver( 0x0303, '/FirmwareVersion'),
+            Reg_u16( 0x0302, '/HardwareVersion'),
+            Reg_u16( 0x0303, '/FirmwareVersion'),
             # Reg_u16( 0x1002, '/PhaseConfig', text=phase_configs, write=(0, 4)),
             Reg_text(0x5000, 7, '/Serial'),
         ]
@@ -50,7 +50,7 @@ class GNM3D_Meter(device.EnergyMeter):
         ]
 
     def device_init(self):
-        log.info('Initializing Garo energy meter using connection "%s"', self.connection())
+        log.debug('Initializing Garo energy meter using connection "%s"', self.connection())
        
         self.read_info()
         phases = 3 #nr_phases[int(self.info['/PhaseConfig'])]
