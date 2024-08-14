@@ -71,6 +71,9 @@ class GNM3D_Meter(device.CustomName, device.EnergyMeter):
 
         self.data_regs = regs
         # self.nr_phases = phases
+    
+    def get_ident(self):
+        return 'garo_gnm3d_{}'.format(self.info['/Serial'])
 
     #def dbus_write_register(self, reg, path, val):
     #    super().dbus_write_register(reg, path, val)
