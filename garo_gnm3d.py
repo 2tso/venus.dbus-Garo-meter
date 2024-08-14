@@ -22,7 +22,7 @@ phase_configs = [
 #    'Locked',
 #]
 
-class GNM3D_Meter(device.CustomName, device.EnergyMeter):
+class GNM3D_Meter(device.EnergyMeter):
     # vendor_id = 'cg'
     # vendor_name = 'Carlo Gavazzi'
     productid = 0xFFFF
