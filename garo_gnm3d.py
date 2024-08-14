@@ -29,6 +29,7 @@ class GNM3D_Meter(device.CustomName, device.EnergyMeter):
     productname = 'Garo GNM3D Energy Meter'
     min_timeout = 0.5
 
+    
     def __init__(self, *args):        
         super(GNM3D_Meter, self).__init__(*args)
 
