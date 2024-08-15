@@ -27,18 +27,14 @@ class GNM3D_Meter(device.EnergyMeter):
     # vendor_name = 'Carlo Gavazzi'
     productid = 0xFFFF
     productname = 'Garo GNM3D Energy Meter'
-    min_timeout = 0.5
+    
 
     
-    def __init__(self, *args):        
-        super(GNM3D_Meter, self).__init__(*args)
-
-        self.info_regs = [
-            Reg_u16( 0x0302, '/HardwareVersion'),
-            Reg_u16( 0x0303, '/FirmwareVersion'),
-            # Reg_u16( 0x1002, '/PhaseConfig', text=phase_configs, write=(0, 4)),
-            Reg_text(0x5000, 7, '/Serial'),
-        ]
+    def __init__(self, spec, modbus, model):      
+        super().__init__(spec, modbus, model)
+        self.min_timeout = 0.5
+        self.nr_phases = 3
+        
     
     def phase_regs(self, n):
         s = 2 * (n - 1)
@@ -50,9 +46,16 @@ class GNM3D_Meter(device.EnergyMeter):
         ]
 
     def device_init(self):
-        log.debug('Initializing Garo energy meter using connection "%s"', self.connection())
-       
-        self.read_info()
+        log.info('Initializing Garo energy meter using connection "%s"', self.connection())
+        
+        self.info_regs = [
+            Reg_u16( 0x0302, '/HardwareVersion'),
+            Reg_u16( 0x0303, '/FirmwareVersion'),
+            # Reg_u16( 0x1002, '/PhaseConfig', text=phase_configs, write=(0, 4)),
+            Reg_text(0x5000, 7, '/Serial'),
+        ]
+        
+        #self.read_info()
         phases = 3 #nr_phases[int(self.info['/PhaseConfig'])]
         regs = [
             Reg_s32l(0x0028, '/Ac/Power',          10, '%.1f W'),
