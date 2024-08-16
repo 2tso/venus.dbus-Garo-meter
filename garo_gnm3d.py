@@ -5,24 +5,22 @@ from register import *
 
 log = logging.getLogger()
 
-#class Reg_text_serial(Reg, str):
-#    def __init__(self, base, count, name=None, little=False, encoding=None, **kwargs):
-#        super().__init__(base, count, name, **kwargs)
-#        self.encoding = encoding or 'ascii'
-#        self.pfmt = '%c%dH' % (['>', '<'][little], count)
+class Reg_text_serial(Reg, str):
+    def __init__(self, base, count, name=None, little=False, encoding=None, **kwargs):
+        super().__init__(base, count, name, **kwargs)
+        self.encoding = encoding or 'ascii'
+        self.pfmt = '%c%dH' % (['>', '<'][little], count)
 
- #   def decode(self, values):
- ##       log.info(values)
-  #      newval = struct.pack(self.pfmt, *values).rstrip(b'\0')
-  #      log.info(newval)
-  #      newval = str(newval.decode(encoding='ascii'))
-  #      log.info(newval)
-  #      return self.update(newval)
+    def decode(self, values):
+        newval = struct.pack(self.pfmt, *values).rstrip(b'\0')
+        log.info(newval)
+        newval = str(newval.decode(self.encoding))
+        log.info(newval)
+        return self.update(newval)
 
-   # def encode(self):
-   #     return struct.unpack(self.pfmt,
-   #         self.value.encode(self.encoding).ljust(2 * self.count, b'\0'))
-
+    def encode(self):
+        return struct.unpack(self.pfmt,
+            self.value.encode(self.encoding).ljust(2 * self.count, b'\0'))
 
 
 nr_phases = [ 3, 3, 2, 1, 3 ]
@@ -72,7 +70,7 @@ class GNM3D_Meter(device.EnergyMeter):
             Reg_u16( 0x0302, '/HardwareVersion'),
             Reg_u16( 0x0303, '/FirmwareVersion'),
             # Reg_u16( 0x1002, '/PhaseConfig', text=phase_configs, write=(0, 4)),
-            Reg_text(0x5000, 7, '/Serial'),
+            Reg_text_serial(0x5000, 7, '/Serial'),
         ]
         
         self.read_info()
