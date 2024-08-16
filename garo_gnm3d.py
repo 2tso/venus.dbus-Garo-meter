@@ -12,9 +12,11 @@ class Reg_text_serial(Reg, str):
         self.pfmt = '%c%dH' % (['>', '<'][little], count)
 
     def decode(self, values):
-        log.info('decode serial'+values)
+        log.info(values)
         newval = struct.pack(self.pfmt, *values).rstrip(b'\0')
-        newval = str(newval.decode(self.encoding))
+        log.info(newval)
+        newval = str(newval.decode(encoding='ascii'))
+        log.info(newval)
         return self.update(newval)
 
     def encode(self):
